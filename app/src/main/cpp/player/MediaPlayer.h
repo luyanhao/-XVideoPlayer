@@ -11,7 +11,7 @@ class MediaPlayer{
 public:
     MediaPlayer(){};
     virtual ~MediaPlayer(){};
-    virtual void Init(JNIEnv *jniEnv, jobject obj, char *url, int playerType, int renderType, jobject surface) = 0;
+    virtual void Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType, jobject surface) = 0;
     virtual void UnInit() = 0;
     virtual void Play() = 0;
     virtual void Pause() = 0;

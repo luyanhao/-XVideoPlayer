@@ -6,6 +6,10 @@
 #define XVIDEOPLAYER_PLAYERWRAPPER_H
 
 #include <jni.h>
+#include "FFMediaPlayer.h"
+
+static const int FFMEDIA_PLAYER = 0;
+static const int HWCODEC_PLAYER = 1;
 
 class PlayerWrapper {
 public:
@@ -18,6 +22,8 @@ public:
     void Play();
     void Pause();
     void Stop();
+private:
+    MediaPlayer *m_MediaPlayer = nullptr;
 };
 
 

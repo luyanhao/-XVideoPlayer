@@ -3,3 +3,31 @@
 //
 
 #include "FFMediaPlayer.h"
+
+void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType, jobject surface) {
+
+}
+
+void FFMediaPlayer::UnInit() {
+
+}
+
+void FFMediaPlayer::Play() {
+
+}
+
+void FFMediaPlayer::Pause() {
+
+}
+
+void FFMediaPlayer::Stop() {
+
+}
+
+void FFMediaPlayer::SeekToPosition(float position) {
+
+}
+
+long FFMediaPlayer::GetMediaParams(int paramType) {
+    return 0;
+}

@@ -1,5 +1,7 @@
 package com.lyhao.xvideoplayer.ui;
 
+import static com.lyhao.xvideoplayer.media.FFMediaPlayer.VIDEO_RENDER_ANWINDOW;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -7,21 +9,22 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.lyhao.xvideoplayer.R;
+import com.lyhao.xvideoplayer.media.FFMediaPlayer;
 import com.lyhao.xvideoplayer.media.MySurfaceView;
 
 public class NativeMediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     private MySurfaceView mSurfaceView;
-    private static final String[] REQUEST_PERMISSIONS = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    };
+    private FFMediaPlayer ffMediaPlayer;
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private String mVideoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/byteflow/one_piece.mp4";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,8 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-
+        ffMediaPlayer = new FFMediaPlayer();
+        ffMediaPlayer.init(mVideoPath, VIDEO_RENDER_ANWINDOW, surfaceHolder.getSurface());
     }
 
     @Override
@@ -48,28 +52,5 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
     @Override
     protected void onResume() {
         super.onResume();
-        if (!hasPermissionsGranted(REQUEST_PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, REQUEST_PERMISSIONS, PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (!hasPermissionsGranted(REQUEST_PERMISSIONS)) {
-                Toast.makeText(this, "We need the permission: WRITE_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-    protected boolean hasPermissionsGranted(String[] permissions) {
-        for (String permission : permissions) {
-            if (ActivityCompat.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
     }
 }

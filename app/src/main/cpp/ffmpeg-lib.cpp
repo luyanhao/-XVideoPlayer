@@ -6,6 +6,8 @@
 #include "jni.h"
 #include "util/LogUtil.h"
 
+#include "PlayerWrapper.h"
+
 extern "C" {
 #include <libavcodec/version.h>
 #include <libavcodec/avcodec.h>
@@ -46,6 +48,15 @@ JNIEXPORT jstring JNICALL Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_native
     LOGCATE("GetFFmpegVersion\n%s", strBuffer);
     //ASanTestCase::MainTest();
     return env->NewStringUTF(strBuffer);
+}
+
+JNIEXPORT jlong JNICALL Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeInit
+        (JNIEnv *env, jobject obj, jstring jurl, int playerType, int renderType, jobject surface) {
+    const char* url = env->GetStringUTFChars(jurl, nullptr);
+    PlayerWrapper* player = new PlayerWrapper();
+    player->Init(env, obj, const_cast<char *>(url), playerType, renderType, surface);
+    env->ReleaseStringUTFChars(jurl, url);
+    return reinterpret_cast<jlong>(player);
 }
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
