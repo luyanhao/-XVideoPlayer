@@ -6,6 +6,7 @@
 #define XVIDEOPLAYER_MEDIAPLAYER_H
 
 #include <jni.h>
+#include <decoder/VideoDecoder.h>
 
 class MediaPlayer{
 public:

@@ -18,3 +18,11 @@ void DecoderBase::UnInit() {
         m_Thread = nullptr;
     }
 }
+
+void DecoderBase::Start() {
+
+}
+
+void DecoderBase::Stop() {
+
+}

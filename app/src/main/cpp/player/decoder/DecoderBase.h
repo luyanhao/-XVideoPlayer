@@ -19,8 +19,8 @@ using namespace std;
 
 class DecoderBase : public Decoder {
 public:
-    DecoderBase();
-    virtual~ DecoderBase();
+    DecoderBase(){};
+    virtual~ DecoderBase(){};
     virtual void Start();
     virtual void Stop();
 

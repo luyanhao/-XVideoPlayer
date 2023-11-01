@@ -5,7 +5,7 @@
 #include "FFMediaPlayer.h"
 
 void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType, jobject surface) {
-
+    m_VideoDecoder = new VideoDecoder(url);
 }
 
 void FFMediaPlayer::UnInit() {

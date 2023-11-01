@@ -6,6 +6,7 @@
 #define XVIDEOPLAYER_FFMEDIAPLAYER_H
 
 #include "MediaPlayer.h"
+#include "VideoDecoder.h"
 
 class FFMediaPlayer : public MediaPlayer {
 public:
@@ -20,6 +21,8 @@ public:
     virtual void Stop();
     virtual void SeekToPosition(float position);
     virtual long GetMediaParams(int paramType);
+private:
+    VideoDecoder *m_VideoDecoder = nullptr;
 };
 
 

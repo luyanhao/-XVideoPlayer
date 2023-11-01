@@ -18,9 +18,10 @@ import android.widget.Toast;
 import com.lyhao.xvideoplayer.R;
 import com.lyhao.xvideoplayer.media.FFMediaPlayer;
 import com.lyhao.xvideoplayer.media.MySurfaceView;
+import com.lyhao.xvideoplayer.util.LogUtil;
 
 public class NativeMediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback {
-
+    public static final String TAG = "NativeMediaPlayerAct";
     private MySurfaceView mSurfaceView;
     private FFMediaPlayer ffMediaPlayer;
     private static final int PERMISSION_REQUEST_CODE = 1;
@@ -35,18 +36,19 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        LogUtil.d(TAG, "========surfaceCreated========");
         ffMediaPlayer = new FFMediaPlayer();
         ffMediaPlayer.init(mVideoPath, VIDEO_RENDER_ANWINDOW, surfaceHolder.getSurface());
     }
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
+        LogUtil.d(TAG, "========surfaceChanged========");
     }
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-
+        LogUtil.d(TAG, "========surfaceDestroyed========");
     }
 
     @Override

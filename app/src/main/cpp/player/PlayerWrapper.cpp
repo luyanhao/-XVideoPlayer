@@ -15,6 +15,9 @@ void PlayerWrapper::Init(JNIEnv *jniEnv, jobject obj, char *url, int playerType,
         default:
             break;
     }
+    if (m_MediaPlayer) {
+        m_MediaPlayer->Init(jniEnv, obj, url, renderType, surface);
+    }
 }
 
 void PlayerWrapper::UnInit() {
