@@ -13,7 +13,9 @@ void FFMediaPlayer::UnInit() {
 }
 
 void FFMediaPlayer::Play() {
-
+    if(m_VideoDecoder) {
+        m_VideoDecoder->Start();
+    }
 }
 
 void FFMediaPlayer::Pause() {

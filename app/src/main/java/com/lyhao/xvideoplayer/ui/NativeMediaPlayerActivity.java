@@ -44,6 +44,7 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
         LogUtil.d(TAG, "========surfaceChanged========");
+        ffMediaPlayer.play();
     }
 
     @Override

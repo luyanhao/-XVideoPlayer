@@ -58,6 +58,13 @@ JNIEXPORT jlong JNICALL Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeIn
     env->ReleaseStringUTFChars(jurl, url);
     return reinterpret_cast<jlong>(player);
 }
+JNIEXPORT void JNICALL Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativePlay
+        (JNIEnv *env, jobject obj, jlong playerHandler) {
+    if(playerHandler != 0) {
+        PlayerWrapper *playerWrapper = reinterpret_cast<PlayerWrapper *>(playerHandler);
+        playerWrapper->Play();
+    }
+}
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LOGCATE("JNI_OnLoad");

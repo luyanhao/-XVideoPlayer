@@ -3,6 +3,7 @@
 //
 
 #include "DecoderBase.h"
+#include "LogUtil.h"
 
 int DecoderBase::Init(const char* url, AVMediaType mediaType){
     strcpy(m_Url, url);
@@ -20,7 +21,7 @@ void DecoderBase::UnInit() {
 }
 
 void DecoderBase::Start() {
-
+    LOGCATI("DecoderBase::Start()");
 }
 
 void DecoderBase::Stop() {

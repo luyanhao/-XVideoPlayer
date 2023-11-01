@@ -15,14 +15,21 @@ public class FFMediaPlayer {
     public static final int VIDEO_RENDER_ANWINDOW       = 1;
     public static final int VIDEO_RENDER_3D_VR          = 2;
 
+    private long mNativePlayerHandle = 0;
+
     public static String getFFmpegVersion() {
         return nativeGetFFmpegVersion();
     }
     private static native String nativeGetFFmpegVersion();
 
     public void init(String url, int videoRenderType, Surface surface) {
-        nativeInit(url, FFMEDIA_PLAYER, videoRenderType, surface);
+        mNativePlayerHandle = nativeInit(url, FFMEDIA_PLAYER, videoRenderType, surface);
+    }
+
+    public void play() {
+        nativePlay(mNativePlayerHandle);
     }
 
     private native long nativeInit(String url, int playerType, int renderType, Object surface);
+    private native long nativePlay(long playerHandle);
 }
