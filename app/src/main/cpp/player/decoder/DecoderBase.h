@@ -8,6 +8,7 @@
 #define __STDC_CONSTANT_MACROS
 extern "C" {
 #include <libavutil/avutil.h>
+#include "libavformat/avformat.h"
 }
 
 #include <thread>
@@ -33,6 +34,18 @@ private:
     char m_Url[MAX_PATH] = {0};
 
     thread *m_Thread = nullptr;
+
+    void StartDecodingThread();
+    static void DoAVDecoding(DecoderBase *decoder);
+    int InitFFDecoder();
+
+    long m_Duration = 0; //ms
+    AVPacket *m_Packet = nullptr;
+    AVFrame * m_Frame = nullptr;
+    AVFormatContext *m_AVFormatContext = nullptr;
+    AVCodec *m_AVCodec = nullptr;
+    AVCodecContext *m_AVCodecContext = nullptr;
+    int m_StreamIndex = -1;
 
 };
 
