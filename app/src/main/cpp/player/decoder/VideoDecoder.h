@@ -4,7 +4,7 @@
 
 #ifndef XVIDEOPLAYER_VIDEODECODER_H
 #define XVIDEOPLAYER_VIDEODECODER_H
-
+#define __STDC_CONSTANT_MACROS
 extern "C" {
 #include <libavutil/avutil.h>
 };
@@ -26,6 +26,7 @@ public:
         return m_VideoHeight;
     }
 private:
+    virtual void OnDecoderReady();
     int m_VideoWidth = 0;
     int m_VideoHeight = 0;
 };

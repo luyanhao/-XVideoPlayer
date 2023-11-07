@@ -5,6 +5,8 @@
 #ifndef XVIDEOPLAYER_MEDIAPLAYER_H
 #define XVIDEOPLAYER_MEDIAPLAYER_H
 
+#define JAVA_PLAYER_EVENT_CALLBACK_API_NAME "playerEventCallback"
+
 #include <jni.h>
 #include <decoder/VideoDecoder.h>
 
@@ -17,6 +19,9 @@ public:
     virtual void Play() = 0;
     virtual void Pause() = 0;
     virtual void Stop() = 0;
+
+    JavaVM  *m_JavaVM = nullptr;
+    jobject m_JavaObj = nullptr;
 };
 
 #endif //XVIDEOPLAYER_MEDIAPLAYER_H

@@ -3,3 +3,9 @@
 //
 
 #include "VideoDecoder.h"
+
+void VideoDecoder::OnDecoderReady() {
+    if (m_MsgContext && m_MessageCallback) {
+        m_MessageCallback(m_MsgContext, MSG_DECODER_READY, 0);
+    }
+}

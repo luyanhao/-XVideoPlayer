@@ -92,6 +92,11 @@ int DecoderBase::InitFFDecoder() {
         LOGCATI("DecoderBase::InitFFDecoder init success!!!!!!! duration=%ld", m_Duration);
         result = 0;
     } while (false);
+
+    if (result != 0 && m_MsgContext && m_MessageCallback) {
+        m_MessageCallback(m_MsgContext, MSG_DECODER_INIT_ERROR, 0);
+    }
+
     return result;
 }
 
@@ -104,6 +109,7 @@ void DecoderBase::DoAVDecoding(DecoderBase * decoder) {
        if (decoder->InitFFDecoder() != 0) {
            break;
        }
+       decoder->OnDecoderReady();
     } while (false);
 }
 

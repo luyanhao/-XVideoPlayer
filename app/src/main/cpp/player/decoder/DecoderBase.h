@@ -18,6 +18,14 @@ extern "C" {
 
 using namespace std;
 
+enum DecoderMsg {
+    MSG_DECODER_INIT_ERROR,
+    MSG_DECODER_READY,
+    MSG_DECODER_DONE,
+    MSG_REQUEST_RENDER,
+    MSG_DECODING_TIME
+};
+
 class DecoderBase : public Decoder {
 public:
     DecoderBase(){};
@@ -25,10 +33,19 @@ public:
     virtual void Start();
     virtual void Stop();
 
+    virtual void SetMessageCallback(void *context, MessageCallback callback) {
+        m_MsgContext = context;
+        m_MessageCallback = callback;
+    }
+
 protected:
     virtual int Init(const char* url, AVMediaType mediaType);
     virtual void UnInit();
 
+    void *m_MsgContext = nullptr;
+    MessageCallback m_MessageCallback = nullptr;
+
+    virtual void OnDecoderReady() = 0;
 private:
     AVMediaType m_MediaType = AVMEDIA_TYPE_UNKNOWN;
     char m_Url[MAX_PATH] = {0};

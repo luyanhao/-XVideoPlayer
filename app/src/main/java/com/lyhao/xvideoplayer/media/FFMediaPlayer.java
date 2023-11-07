@@ -2,7 +2,12 @@ package com.lyhao.xvideoplayer.media;
 
 import android.view.Surface;
 
+import com.lyhao.xvideoplayer.util.LogUtil;
+
+import java.util.Locale;
+
 public class FFMediaPlayer {
+    public static final String TAG = "FFMediaPlayer";
     static {
         System.loadLibrary("ffmpeg-lib");
     }
@@ -16,6 +21,10 @@ public class FFMediaPlayer {
     public static final int VIDEO_RENDER_3D_VR          = 2;
 
     private long mNativePlayerHandle = 0;
+
+    private void playerEventCallback(int msgType, float msgValue) {
+        LogUtil.d(TAG,String.format(Locale.getDefault(), "onEventCallback: %d --- %f", msgType, msgValue));
+    }
 
     public static String getFFmpegVersion() {
         return nativeGetFFmpegVersion();

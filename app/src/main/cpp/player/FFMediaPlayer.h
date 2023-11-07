@@ -22,6 +22,10 @@ public:
     virtual void SeekToPosition(float position);
     virtual long GetMediaParams(int paramType);
 private:
+    JNIEnv *GetJNIEnv(bool *isAttach);
+    jobject GetJavaObj();
+    JavaVM*  GetJavaVM();
+    static void PostMessage(void *context, int msgType, float msgValue);
     VideoDecoder *m_VideoDecoder = nullptr;
 };
 
