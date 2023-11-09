@@ -18,6 +18,13 @@ extern "C" {
 
 using namespace std;
 
+enum DecoderState {
+    STATE_UNKNOWN,
+    STATE_DECODING,
+    STATE_PAUSE,
+    STATE_STOP
+};
+
 enum DecoderMsg {
     MSG_DECODER_INIT_ERROR,
     MSG_DECODER_READY,
@@ -46,11 +53,19 @@ protected:
     MessageCallback m_MessageCallback = nullptr;
 
     virtual void OnDecoderReady() = 0;
+    AVCodecContext *GetCodeContext() {
+        return m_AVCodecContext;
+    }
 private:
     AVMediaType m_MediaType = AVMEDIA_TYPE_UNKNOWN;
     char m_Url[MAX_PATH] = {0};
 
     thread *m_Thread = nullptr;
+    mutex m_Mutex;
+    DecoderState m_DecoderState = STATE_UNKNOWN;
+
+    void DecodingLoop();
+    int DecodeOnePacket();
 
     void StartDecodingThread();
     static void DoAVDecoding(DecoderBase *decoder);

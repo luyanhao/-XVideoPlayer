@@ -100,6 +100,30 @@ int DecoderBase::InitFFDecoder() {
     return result;
 }
 
+void DecoderBase::DecodingLoop() {
+    {
+        std::unique_lock<std::mutex> lock(m_Mutex);
+        m_DecoderState = STATE_DECODING;
+        lock.unlock();
+    }
+    for(;;) {
+        if (m_DecoderState == STATE_STOP) {
+            break;
+        }
+        if (DecodeOnePacket() != 0) {
+
+            m_DecoderState = STATE_STOP; // 解码结束，先这样写，后边再改
+        }
+    }
+    LOGCATE("DecoderBase::DecodingLoop end");
+}
+
+int DecoderBase::DecodeOnePacket() {
+    int result = av_read_frame(m_AVFormatContext, m_Packet);
+    LOGCATI("DecoderBase::DecodeOnePacket result=%d", result);
+    return result;
+}
+
 void DecoderBase::StartDecodingThread() {
     m_Thread = new thread(DoAVDecoding, this);
 }
@@ -110,6 +134,7 @@ void DecoderBase::DoAVDecoding(DecoderBase * decoder) {
            break;
        }
        decoder->OnDecoderReady();
+       decoder->DecodingLoop();
     } while (false);
 }
 
