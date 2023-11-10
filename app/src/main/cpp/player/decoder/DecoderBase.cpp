@@ -120,7 +120,32 @@ void DecoderBase::DecodingLoop() {
 
 int DecoderBase::DecodeOnePacket() {
     int result = av_read_frame(m_AVFormatContext, m_Packet);
-    LOGCATI("DecoderBase::DecodeOnePacket result=%d", result);
+    while (result == 0) {
+        if (m_Packet->stream_index == m_StreamIndex) {
+            if (avcodec_send_packet(m_AVCodecContext, m_Packet) == AVERROR_EOF) {
+                // 解码结束
+                result = -1;
+                break;
+            }
+            int frameCount = 0;
+            while(avcodec_receive_frame(m_AVCodecContext, m_Frame) == 0) {
+                // 更新时间戳
+                // 同步
+                // 渲染
+                LOGCATI("DecoderBase::DecodeOnePacket avcodec_receive_frame");
+                frameCount ++;
+            }
+            LOGCATI("DecoderBase::DecodeOnePacket frameCount=%d", frameCount);
+            if (frameCount > 0) {
+                // 一个Packet解码完成
+                result = 0;
+                break;
+            }
+        }
+        av_packet_unref(m_Packet);
+        result = av_read_frame(m_AVFormatContext, m_Packet);
+    }
+    LOGCATI("DecoderBase::DecodeOnePacket return -=-=-=-=-= %d", result);
     return result;
 }
 
