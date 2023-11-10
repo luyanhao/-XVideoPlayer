@@ -132,6 +132,7 @@ int DecoderBase::DecodeOnePacket() {
                 // 更新时间戳
                 // 同步
                 // 渲染
+                OnFrameAvailable(m_Frame);
                 LOGCATI("DecoderBase::DecodeOnePacket avcodec_receive_frame");
                 frameCount ++;
             }

@@ -9,3 +9,7 @@ void VideoDecoder::OnDecoderReady() {
         m_MessageCallback(m_MsgContext, MSG_DECODER_READY, 0);
     }
 }
+
+void VideoDecoder::OnFrameAvailable(AVFrame *avFrame) {
+    // TODO
+}

@@ -53,6 +53,7 @@ protected:
     MessageCallback m_MessageCallback = nullptr;
 
     virtual void OnDecoderReady() = 0;
+    virtual void OnFrameAvailable(AVFrame *avFrame) = 0;
     AVCodecContext *GetCodeContext() {
         return m_AVCodecContext;
     }

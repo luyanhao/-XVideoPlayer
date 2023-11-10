@@ -27,6 +27,7 @@ public:
     }
 private:
     virtual void OnDecoderReady();
+    virtual void OnFrameAvailable(AVFrame *avFrame);
     int m_VideoWidth = 0;
     int m_VideoHeight = 0;
 };
