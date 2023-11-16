@@ -38,7 +38,7 @@ void VideoDecoder::OnFrameAvailable(AVFrame *avFrame) {
     if (m_VideoRender != nullptr && avFrame != nullptr) {
         NativeImage image;
         if (m_VideoRender->GetRenderType() == VIDEO_RENDER_ANWINDOW) {
-            LOGCATE("VideoDecoder::OnDecoderReady %d ~ %d", avFrame->width, avFrame->height);
+//            LOGCATE("VideoDecoder::OnDecoderReady %d ~ %d, %d, %d", avFrame->width, avFrame->height, avFrame->coded_picture_number, avFrame->pict_type);
             sws_scale(m_SwsContext, avFrame->data, avFrame->linesize, 0,
                       m_VideoHeight, m_RGBAFrame->data, m_RGBAFrame->linesize);
 
@@ -52,7 +52,8 @@ void VideoDecoder::OnFrameAvailable(AVFrame *avFrame) {
         m_VideoRender->RenderVideoFrame(&image);
     }
 
-    if(m_MsgContext && m_MessageCallback) {
-        m_MessageCallback(m_MsgContext, MSG_REQUEST_RENDER, 0);
-    }
+    //TODO 先屏蔽
+//    if(m_MsgContext && m_MessageCallback) {
+//        m_MessageCallback(m_MsgContext, MSG_REQUEST_RENDER, 0);
+//    }
 }

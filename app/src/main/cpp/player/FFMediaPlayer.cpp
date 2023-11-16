@@ -78,7 +78,7 @@ void FFMediaPlayer::PostMessage(void *context, int msgType, float msgValue) {
         FFMediaPlayer *player = static_cast<FFMediaPlayer *>(context);
         bool isAttach = false;
         JNIEnv *env = player->GetJNIEnv(&isAttach);
-        LOGCATE("FFMediaPlayer::PostMessage env=%p", env);
+//        LOGCATE("FFMediaPlayer::PostMessage env=%p", env);
         if (env == nullptr)
             return;
         jobject javaObj = player->GetJavaObj();

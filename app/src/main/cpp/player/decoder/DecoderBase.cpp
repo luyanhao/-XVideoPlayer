@@ -133,7 +133,7 @@ int DecoderBase::DecodeOnePacket() {
                 // 同步
                 // 渲染
                 OnFrameAvailable(m_Frame);
-                LOGCATI("DecoderBase::DecodeOnePacket avcodec_receive_frame");
+//                LOGCATI("DecoderBase::DecodeOnePacket avcodec_receive_frame");
                 frameCount ++;
             }
             LOGCATI("DecoderBase::DecodeOnePacket frameCount=%d", frameCount);
@@ -146,7 +146,7 @@ int DecoderBase::DecodeOnePacket() {
         av_packet_unref(m_Packet);
         result = av_read_frame(m_AVFormatContext, m_Packet);
     }
-    LOGCATI("DecoderBase::DecodeOnePacket return -=-=-=-=-= %d", result);
+//    LOGCATI("DecoderBase::DecodeOnePacket return -=-=-=-=-= %d", result);
     return result;
 }
 
