@@ -2,6 +2,7 @@
 // Created by lyhao on 2023/10/24.
 //
 
+#include <render/video/NativeRender.h>
 #include "FFMediaPlayer.h"
 #include "LogUtil.h"
 
@@ -11,6 +12,11 @@ void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType,
     m_JavaObj = jniEnv->NewGlobalRef(obj);
 
     m_VideoDecoder = new VideoDecoder(url);
+
+    if (renderType == VIDEO_RENDER_ANWINDOW) {
+        m_VideoRender = new NativeRender(renderType, jniEnv, surface);
+        m_VideoDecoder->SetVideoRender(m_VideoRender);
+    }
 
     m_VideoDecoder->SetMessageCallback(this, PostMessage);
 }

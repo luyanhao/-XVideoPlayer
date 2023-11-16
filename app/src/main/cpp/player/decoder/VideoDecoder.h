@@ -7,8 +7,11 @@
 #define __STDC_CONSTANT_MACROS
 extern "C" {
 #include <libavutil/avutil.h>
+#include <libavutil//imgutils.h>
+#include <libswscale//swscale.h>
 };
 #include "DecoderBase.h"
+#include "VideoRender.h"
 
 class VideoDecoder : public DecoderBase{
 public:
@@ -25,11 +28,25 @@ public:
     int GetVideoHeight() {
         return m_VideoHeight;
     }
+
+    void SetVideoRender(VideoRender *videoRender){
+        m_VideoRender = videoRender;
+    }
+
 private:
     virtual void OnDecoderReady();
     virtual void OnFrameAvailable(AVFrame *avFrame);
+
+    VideoRender *m_VideoRender = nullptr;
     int m_VideoWidth = 0;
     int m_VideoHeight = 0;
+
+    int m_RenderWidth = 0;
+    int m_RenderHeight = 0;
+
+    AVFrame *m_RGBAFrame = nullptr;
+    uint8_t *m_FrameBuffer = nullptr;
+    SwsContext *m_SwsContext = nullptr;
 };
 
 

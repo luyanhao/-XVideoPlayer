@@ -6,7 +6,6 @@
 #define XVIDEOPLAYER_FFMEDIAPLAYER_H
 
 #include "MediaPlayer.h"
-#include "VideoDecoder.h"
 
 class FFMediaPlayer : public MediaPlayer {
 public:
@@ -27,6 +26,7 @@ private:
     JavaVM*  GetJavaVM();
     static void PostMessage(void *context, int msgType, float msgValue);
     VideoDecoder *m_VideoDecoder = nullptr;
+    VideoRender *m_VideoRender = nullptr;
 };
 
 
