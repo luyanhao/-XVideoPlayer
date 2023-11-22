@@ -162,8 +162,33 @@ void DecoderBase::DoAVDecoding(DecoderBase * decoder) {
        decoder->OnDecoderReady();
        decoder->DecodingLoop();
     } while (false);
+    decoder->UnInitFFDecoder();
+    decoder->OnDecoderDone();
 }
 
 void DecoderBase::Stop() {
 
+}
+
+void DecoderBase::UnInitFFDecoder() {
+    LOGCATD("DecoderBase::UnInitFFDecoder");
+    if(m_Frame != nullptr) {
+        av_frame_free(&m_Frame);
+        m_Frame = nullptr;
+    }
+    if(m_Packet != nullptr) {
+        av_packet_free(&m_Packet);
+        m_Packet = nullptr;
+    }
+    if(m_AVCodecContext != nullptr) {
+        avcodec_close(m_AVCodecContext);
+        avcodec_free_context(&m_AVCodecContext);
+        m_AVCodecContext = nullptr;
+        m_AVCodec = nullptr;
+    }
+    if(m_AVFormatContext != nullptr) {
+        avformat_close_input(&m_AVFormatContext);
+        avformat_free_context(m_AVFormatContext);
+        m_AVFormatContext = nullptr;
+    }
 }

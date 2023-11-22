@@ -55,5 +55,5 @@ void NativeRender::RenderVideoFrame(NativeImage *pImage) {
 }
 
 void NativeRender::UnInit() {
-
+    LOGCATD("NativeRender::UnInit");
 }

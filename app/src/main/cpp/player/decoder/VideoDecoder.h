@@ -35,6 +35,7 @@ public:
 
 private:
     virtual void OnDecoderReady();
+    virtual void OnDecoderDone();
     virtual void OnFrameAvailable(AVFrame *avFrame);
 
     VideoRender *m_VideoRender = nullptr;

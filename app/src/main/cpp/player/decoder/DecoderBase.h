@@ -54,6 +54,7 @@ protected:
 
     virtual void OnDecoderReady() = 0;
     virtual void OnFrameAvailable(AVFrame *avFrame) = 0;
+    virtual void OnDecoderDone() = 0;
     AVCodecContext *GetCodeContext() {
         return m_AVCodecContext;
     }
@@ -71,6 +72,7 @@ private:
     void StartDecodingThread();
     static void DoAVDecoding(DecoderBase *decoder);
     int InitFFDecoder();
+    void UnInitFFDecoder();
 
     long m_Duration = 0; //ms
     AVPacket *m_Packet = nullptr;

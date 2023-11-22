@@ -38,7 +38,8 @@ void VideoDecoder::OnFrameAvailable(AVFrame *avFrame) {
     if (m_VideoRender != nullptr && avFrame != nullptr) {
         NativeImage image;
         if (m_VideoRender->GetRenderType() == VIDEO_RENDER_ANWINDOW) {
-//            LOGCATE("VideoDecoder::OnDecoderReady %d ~ %d, %d, %d", avFrame->width, avFrame->height, avFrame->coded_picture_number, avFrame->pict_type);
+            LOGCATE("VideoDecoder::OnDecoderReady %d ~ %d, %d, %d, %d",
+                    avFrame->width, avFrame->height, avFrame->linesize[0], avFrame->linesize[1], avFrame->linesize[2]);
             sws_scale(m_SwsContext, avFrame->data, avFrame->linesize, 0,
                       m_VideoHeight, m_RGBAFrame->data, m_RGBAFrame->linesize);
 
@@ -56,4 +57,26 @@ void VideoDecoder::OnFrameAvailable(AVFrame *avFrame) {
 //    if(m_MsgContext && m_MessageCallback) {
 //        m_MessageCallback(m_MsgContext, MSG_REQUEST_RENDER, 0);
 //    }
+}
+
+void VideoDecoder::OnDecoderDone() {
+    LOGCATE("VideoDecoder::OnDecoderDone");
+    if(m_MsgContext && m_MessageCallback) {
+        m_MessageCallback(m_MsgContext, MSG_DECODER_DONE, 0);
+    }
+    if(m_VideoRender) {
+        m_VideoRender->UnInit();
+    }
+    if(m_RGBAFrame != nullptr) {
+        av_frame_free(&m_RGBAFrame);
+        m_RGBAFrame = nullptr;
+    }
+    if(m_FrameBuffer != nullptr) {
+        free(&m_FrameBuffer);
+        m_FrameBuffer = nullptr;
+    }
+    if(m_SwsContext != nullptr) {
+        sws_freeContext(m_SwsContext);
+        m_SwsContext = nullptr;
+    }
 }
