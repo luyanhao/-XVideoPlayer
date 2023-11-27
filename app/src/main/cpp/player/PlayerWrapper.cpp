@@ -45,3 +45,10 @@ void PlayerWrapper::Stop() {
         m_MediaPlayer->Stop();
     }
 }
+
+long PlayerWrapper::GetMediaParams(int paramType) {
+    if(m_MediaPlayer) {
+        return m_MediaPlayer->GetMediaParams(paramType);
+    }
+    return 0;
+}

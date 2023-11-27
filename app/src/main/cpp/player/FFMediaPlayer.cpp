@@ -44,6 +44,14 @@ void FFMediaPlayer::SeekToPosition(float position) {
 }
 
 long FFMediaPlayer::GetMediaParams(int paramType) {
+    switch (paramType) {
+        case MEDIA_PARAM_VIDEO_WIDTH: {
+            return m_VideoDecoder != nullptr ? m_VideoDecoder->GetVideoWidth() : 0;
+        }
+        case MEDIA_PARAM_VIDEO_HEIGHT: {
+            return m_VideoDecoder != nullptr ? m_VideoDecoder->GetVideoHeight() : 0;
+        }
+    }
     return 0;
 }
 

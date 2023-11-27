@@ -66,6 +66,16 @@ JNIEXPORT void JNICALL Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativePla
     }
 }
 
+JNIEXPORT jlong JNICALL
+Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeGetMediaParams(JNIEnv *env, jclass clazz,
+                                                                     jlong playerHandler, jint param_type) {
+    if(playerHandler != 0) {
+        PlayerWrapper *playerWrapper = reinterpret_cast<PlayerWrapper *>(playerHandler);
+        return playerWrapper->GetMediaParams(param_type);
+    }
+    return 0;
+}
+
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LOGCATE("JNI_OnLoad");
     return JNI_VERSION_1_4;

@@ -1,5 +1,9 @@
 package com.lyhao.xvideoplayer.ui;
 
+import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_HEIGHT;
+import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_WIDTH;
+import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MSG_DECODER_DONE;
+import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MSG_DECODER_READY;
 import static com.lyhao.xvideoplayer.media.FFMediaPlayer.VIDEO_RENDER_ANWINDOW;
 
 import androidx.annotation.NonNull;
@@ -20,7 +24,9 @@ import com.lyhao.xvideoplayer.media.FFMediaPlayer;
 import com.lyhao.xvideoplayer.media.MySurfaceView;
 import com.lyhao.xvideoplayer.util.LogUtil;
 
-public class NativeMediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback {
+import java.util.Locale;
+
+public class NativeMediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback, FFMediaPlayer.EventCallback {
     public static final String TAG = "NativeMediaPlayerAct";
     private MySurfaceView mSurfaceView;
     private FFMediaPlayer ffMediaPlayer;
@@ -38,6 +44,7 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         LogUtil.d(TAG, "========surfaceCreated========");
         ffMediaPlayer = new FFMediaPlayer();
+        ffMediaPlayer.addEventCallback(this);
         ffMediaPlayer.init(mVideoPath, VIDEO_RENDER_ANWINDOW, surfaceHolder.getSurface());
     }
 
@@ -55,5 +62,29 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onPlayerEvent(int msgType, float msgValue) {
+        runOnUiThread(() -> {
+            switch (msgType) {
+                case MSG_DECODER_READY:{
+                    onDecoderReady();
+                    break;
+                }
+                case MSG_DECODER_DONE:{
+                    break;
+                }
+            }
+        });
+    }
+
+    private void onDecoderReady() {
+        int width = (int)ffMediaPlayer.getMediaParams(MEDIA_PARAM_VIDEO_WIDTH);
+        int height = (int)ffMediaPlayer.getMediaParams(MEDIA_PARAM_VIDEO_HEIGHT);
+        LogUtil.d(TAG, String.format(Locale.getDefault(), "%d - %d", width, height));
+        if (width * height != 0) {
+            mSurfaceView.setAspectRatio(width, height);
+        }
     }
 }

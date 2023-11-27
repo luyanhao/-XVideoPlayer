@@ -22,6 +22,7 @@ public:
     void Play();
     void Pause();
     void Stop();
+    long GetMediaParams(int paramType);
 private:
     MediaPlayer *m_MediaPlayer = nullptr;
 };
