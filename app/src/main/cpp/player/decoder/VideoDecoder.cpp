@@ -38,7 +38,7 @@ void VideoDecoder::OnFrameAvailable(AVFrame *avFrame) {
     if (m_VideoRender != nullptr && avFrame != nullptr) {
         NativeImage image;
         if (m_VideoRender->GetRenderType() == VIDEO_RENDER_ANWINDOW) {
-            LOGCATE("VideoDecoder::OnDecoderReady %d ~ %d, %d, %d, %d",
+            LOGCATE("VideoDecoder::OnFrameAvailable %d ~ %d, %d, %d, %d",
                     avFrame->width, avFrame->height, avFrame->linesize[0], avFrame->linesize[1], avFrame->linesize[2]);
             sws_scale(m_SwsContext, avFrame->data, avFrame->linesize, 0,
                       m_VideoHeight, m_RGBAFrame->data, m_RGBAFrame->linesize);
