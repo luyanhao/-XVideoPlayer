@@ -110,6 +110,9 @@ void DecoderBase::DecodingLoop() {
         if (m_DecoderState == STATE_STOP) {
             break;
         }
+        if (m_StartTimeStamp == -1) {
+            m_StartTimeStamp = GetSysCurrentTime();
+        }
         if (DecodeOnePacket() != 0) {
 
             m_DecoderState = STATE_STOP; // 解码结束，先这样写，后边再改
@@ -130,7 +133,9 @@ int DecoderBase::DecodeOnePacket() {
             int frameCount = 0;
             while(avcodec_receive_frame(m_AVCodecContext, m_Frame) == 0) {
                 // 更新时间戳
+                UpdateTimeStamp();
                 // 同步
+                Async();
                 // 渲染
                 OnFrameAvailable(m_Frame);
 //                LOGCATI("DecoderBase::DecodeOnePacket avcodec_receive_frame");
@@ -148,6 +153,34 @@ int DecoderBase::DecodeOnePacket() {
     }
 //    LOGCATI("DecoderBase::DecodeOnePacket return -=-=-=-=-= %d", result);
     return result;
+}
+
+
+void DecoderBase::UpdateTimeStamp() {
+//    LOGCATD("DecoderBase::UpdateTimeStamp == %ld  ---  %ld", m_Frame->pkt_dts, m_Frame->pts);
+    if (m_Frame->pts != AV_NOPTS_VALUE) {
+        m_CurTimeStamp = m_Frame->pts;
+    } else if (m_Frame->pkt_dts != AV_NOPTS_VALUE){
+        m_CurTimeStamp = m_Frame->pkt_dts;
+    } else {
+        m_CurTimeStamp = 0;
+    }
+
+    m_CurTimeStamp = (int64_t)((double )m_CurTimeStamp * av_q2d(m_AVFormatContext->streams[m_StreamIndex]->time_base) * 1000);
+
+}
+
+long DecoderBase::Async() {
+    long elapsedTime = GetSysCurrentTime() - m_StartTimeStamp;
+    long delay = 0;
+    if (m_CurTimeStamp > elapsedTime) {
+        LOGCATD("DecoderBase::Async m_CurTimeStamp=%ld, elapsedTime=%ld", m_CurTimeStamp, elapsedTime);
+        auto sleepTime = static_cast<unsigned int>(m_CurTimeStamp = elapsedTime);
+        sleepTime = sleepTime > DELAY_THRESHOLD ? DELAY_THRESHOLD : sleepTime;
+        av_usleep(sleepTime * 1000);
+    }
+    delay = elapsedTime - m_CurTimeStamp;
+    return delay;
 }
 
 void DecoderBase::StartDecodingThread() {

@@ -9,12 +9,14 @@
 extern "C" {
 #include <libavutil/avutil.h>
 #include "libavformat/avformat.h"
+#include <libavutil/time.h>
 }
 
 #include <thread>
 #include "Decoder.h"
 
 #define MAX_PATH  2048
+#define DELAY_THRESHOLD 100 //100ms
 
 using namespace std;
 
@@ -68,6 +70,8 @@ private:
 
     void DecodingLoop();
     int DecodeOnePacket();
+    void UpdateTimeStamp();
+    long Async();
 
     void StartDecodingThread();
     static void DoAVDecoding(DecoderBase *decoder);
@@ -82,6 +86,8 @@ private:
     AVCodecContext *m_AVCodecContext = nullptr;
     int m_StreamIndex = -1;
 
+    long m_CurTimeStamp = 0;
+    long m_StartTimeStamp = -1;
 };
 
 
