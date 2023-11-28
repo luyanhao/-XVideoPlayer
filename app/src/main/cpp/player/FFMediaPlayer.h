@@ -26,6 +26,7 @@ private:
     JavaVM*  GetJavaVM();
     static void PostMessage(void *context, int msgType, float msgValue);
     VideoDecoder *m_VideoDecoder = nullptr;
+    AudioDecoder *m_AudioDecoder = nullptr;
     VideoRender *m_VideoRender = nullptr;
 };
 

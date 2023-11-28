@@ -13,6 +13,7 @@
 
 #include <jni.h>
 #include <decoder/VideoDecoder.h>
+#include <decoder/AudioDecoder.h>
 
 class MediaPlayer{
 public:

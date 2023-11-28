@@ -12,6 +12,7 @@ void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType,
     m_JavaObj = jniEnv->NewGlobalRef(obj);
 
     m_VideoDecoder = new VideoDecoder(url);
+    m_AudioDecoder = new AudioDecoder(url);
 
     if (renderType == VIDEO_RENDER_ANWINDOW) {
         m_VideoRender = new NativeRender(renderType, jniEnv, surface);
@@ -28,6 +29,9 @@ void FFMediaPlayer::UnInit() {
 void FFMediaPlayer::Play() {
     if(m_VideoDecoder) {
         m_VideoDecoder->Start();
+    }
+    if(m_AudioDecoder) {
+        m_AudioDecoder->Start();
     }
 }
 
