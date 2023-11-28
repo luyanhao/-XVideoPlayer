@@ -176,7 +176,7 @@ long DecoderBase::Async() {
     long delay = 0;
     if (m_CurTimeStamp > elapsedTime) {
         LOGCATD("DecoderBase::Async m_MediaType=%d m_CurTimeStamp=%ld, elapsedTime=%ld", m_MediaType, m_CurTimeStamp, elapsedTime);
-        auto sleepTime = static_cast<unsigned int>(m_CurTimeStamp = elapsedTime);
+        auto sleepTime = static_cast<unsigned int>(m_CurTimeStamp - elapsedTime);
         sleepTime = sleepTime > DELAY_THRESHOLD ? DELAY_THRESHOLD : sleepTime;
         av_usleep(sleepTime * 1000);
     }
