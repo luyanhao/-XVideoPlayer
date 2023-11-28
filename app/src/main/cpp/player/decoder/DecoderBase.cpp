@@ -89,7 +89,7 @@ int DecoderBase::InitFFDecoder() {
         m_Packet = av_packet_alloc();
         m_Frame = av_frame_alloc();
 
-        LOGCATI("DecoderBase::InitFFDecoder init success!!!!!!! duration=%ld", m_Duration);
+        LOGCATI("DecoderBase::InitFFDecoder init success!!!!!!! m_MediaType=%d duration=%ld", m_MediaType, m_Duration);
         result = 0;
     } while (false);
 
@@ -167,6 +167,7 @@ void DecoderBase::UpdateTimeStamp() {
     }
 
     m_CurTimeStamp = (int64_t)((double )m_CurTimeStamp * av_q2d(m_AVFormatContext->streams[m_StreamIndex]->time_base) * 1000);
+    LOGCATD("DecoderBase::UpdateTimeStamp m_MediaType=%d time= %ld", m_MediaType, m_CurTimeStamp);
 
 }
 
@@ -174,7 +175,7 @@ long DecoderBase::Async() {
     long elapsedTime = GetSysCurrentTime() - m_StartTimeStamp;
     long delay = 0;
     if (m_CurTimeStamp > elapsedTime) {
-        LOGCATD("DecoderBase::Async m_CurTimeStamp=%ld, elapsedTime=%ld", m_CurTimeStamp, elapsedTime);
+        LOGCATD("DecoderBase::Async m_MediaType=%d m_CurTimeStamp=%ld, elapsedTime=%ld", m_MediaType, m_CurTimeStamp, elapsedTime);
         auto sleepTime = static_cast<unsigned int>(m_CurTimeStamp = elapsedTime);
         sleepTime = sleepTime > DELAY_THRESHOLD ? DELAY_THRESHOLD : sleepTime;
         av_usleep(sleepTime * 1000);
