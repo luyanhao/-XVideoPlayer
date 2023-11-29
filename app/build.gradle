@@ -34,8 +34,28 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file("../mykeystore.jks")
+            storePassword '123456'
+            keyAlias 'alias'
+            keyPassword 'alias123'
+
+            v2SigningEnabled true
+        }
+        debug {
+            storeFile file('/home/lyhao/MyStudy/XVideoPlayer/mykeystore.jks')
+            storePassword '123456'
+            keyAlias 'alias'
+            keyPassword 'alias123'
+
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
