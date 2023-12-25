@@ -5,6 +5,7 @@
 #include <render/video/NativeRender.h>
 #include "FFMediaPlayer.h"
 #include "LogUtil.h"
+#include "OpenSLRender.h"
 
 void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType, jobject surface) {
 
@@ -18,6 +19,9 @@ void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType,
         m_VideoRender = new NativeRender(renderType, jniEnv, surface);
         m_VideoDecoder->SetVideoRender(m_VideoRender);
     }
+
+    m_AudioRender = new OpenSLRender();
+    m_AudioDecoder->SetAudioRender(m_AudioRender);
 
     m_VideoDecoder->SetMessageCallback(this, PostMessage);
 }
