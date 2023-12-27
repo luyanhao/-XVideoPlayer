@@ -14,6 +14,7 @@ extern "C" {
 
 #include <thread>
 #include "Decoder.h"
+#include "AsyncUtil.cpp"
 
 #define MAX_PATH  2048
 #define DELAY_THRESHOLD 100 //100ms
@@ -87,6 +88,7 @@ private:
     int m_StreamIndex = -1;
 
     long m_CurTimeStamp = 0;
+    long m_LastedTime = 0;
     long m_StartTimeStamp = -1;
 };
 

@@ -172,16 +172,32 @@ void DecoderBase::UpdateTimeStamp() {
 }
 
 long DecoderBase::Async() {
-    long elapsedTime = GetSysCurrentTime() - m_StartTimeStamp;
-    long delay = 0;
-    if (m_CurTimeStamp > elapsedTime) {
-        LOGCATD("DecoderBase::Async m_MediaType=%d m_CurTimeStamp=%ld, elapsedTime=%ld", m_MediaType, m_CurTimeStamp, elapsedTime);
-        auto sleepTime = static_cast<unsigned int>(m_CurTimeStamp - elapsedTime);
-        sleepTime = sleepTime > DELAY_THRESHOLD ? DELAY_THRESHOLD : sleepTime;
-        av_usleep(sleepTime * 1000);
+    if (m_MediaType == AVMEDIA_TYPE_AUDIO) {
+        long delay = m_CurTimeStamp - m_LastedTime;
+        AsyncUtil::getInstance().SetAudioPts(m_CurTimeStamp);
+        if (delay > 0) {
+            LOGCATD("DecoderBase::Async Audio delay=======%ld", delay);
+            av_usleep(delay / 2 * 1000);
+        }
+        m_LastedTime = m_CurTimeStamp;
+        return delay;
+    } else {
+        long delay = AsyncUtil::getInstance().CalculateDiff(m_CurTimeStamp);
+        delay = delay > DELAY_THRESHOLD ? DELAY_THRESHOLD : delay;
+        if (delay > 0) {
+            LOGCATD("DecoderBase::Async Video delay=======%ld", delay);
+            av_usleep(delay * 1000);
+        }
+//        long elapsedTime = GetSysCurrentTime() - m_StartTimeStamp;
+//        if (m_CurTimeStamp > elapsedTime) {
+//            LOGCATD("DecoderBase::Async m_MediaType=%d m_CurTimeStamp=%ld, elapsedTime=%ld", m_MediaType, m_CurTimeStamp, elapsedTime);
+//            auto sleepTime = static_cast<unsigned int>(m_CurTimeStamp - elapsedTime);
+//            sleepTime = sleepTime > DELAY_THRESHOLD ? DELAY_THRESHOLD : sleepTime;
+//            av_usleep(sleepTime * 1000);
+//        }
+//        delay = elapsedTime - m_CurTimeStamp;
+        return delay;
     }
-    delay = elapsedTime - m_CurTimeStamp;
-    return delay;
 }
 
 void DecoderBase::StartDecodingThread() {
