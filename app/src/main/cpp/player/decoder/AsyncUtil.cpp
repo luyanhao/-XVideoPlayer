@@ -7,7 +7,7 @@
 class AsyncUtil {
 private:
     std::mutex mMutex;
-    long audioPts = 0;
+    volatile long audioPts = 0;
     long diff = 0;
     AsyncUtil() = default;
 
