@@ -31,7 +31,7 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
     private MySurfaceView mSurfaceView;
     private FFMediaPlayer ffMediaPlayer;
     private static final int PERMISSION_REQUEST_CODE = 1;
-    private String mVideoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/byteflow/one_piece.mp4";
+    private String mVideoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/byteflow/oceans.mp4";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
