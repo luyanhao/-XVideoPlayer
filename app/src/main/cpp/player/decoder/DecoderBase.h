@@ -42,7 +42,7 @@ public:
     virtual~ DecoderBase(){};
     virtual void Start();
     virtual void Stop();
-
+    virtual void SeekToPosition(float d);
     virtual void SetMessageCallback(void *context, MessageCallback callback) {
         m_MsgContext = context;
         m_MessageCallback = callback;
@@ -67,6 +67,7 @@ private:
 
     thread *m_Thread = nullptr;
     mutex m_Mutex;
+    condition_variable m_Cond;
     DecoderState m_DecoderState = STATE_UNKNOWN;
 
     void DecodingLoop();
@@ -89,6 +90,9 @@ private:
     long m_CurTimeStamp = 0;
     long m_LastedTime = 0;
     long m_StartTimeStamp = -1;
+
+    volatile float      m_SeekPosition = 0;
+    volatile bool       m_SeekSuccess = false;
 };
 
 

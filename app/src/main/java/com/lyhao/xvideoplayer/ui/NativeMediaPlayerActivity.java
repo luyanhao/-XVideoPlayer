@@ -59,6 +59,9 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                if (ffMediaPlayer != null) {
+                    ffMediaPlayer.seekToPosition(seekBar.getProgress());
+                }
                 mIsTouch = false;
             }
         });

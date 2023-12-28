@@ -100,6 +100,14 @@ int DecoderBase::InitFFDecoder() {
     return result;
 }
 
+void DecoderBase::SeekToPosition(float position) {
+    LOGCATI("DecoderBase::SeekToPosition position=%f", position);
+    std::unique_lock<std::mutex> lock(m_Mutex);
+    m_SeekPosition = position;
+    m_DecoderState = STATE_DECODING;
+    m_Cond.notify_all();
+}
+
 void DecoderBase::DecodingLoop() {
     {
         std::unique_lock<std::mutex> lock(m_Mutex);
@@ -107,6 +115,10 @@ void DecoderBase::DecodingLoop() {
         lock.unlock();
     }
     for(;;) {
+        while (m_DecoderState == STATE_PAUSE) {
+            std::unique_lock<std::mutex> lock(m_Mutex);
+            m_Cond.wait(lock);
+        }
         if (m_DecoderState == STATE_STOP) {
             break;
         }
@@ -114,14 +126,32 @@ void DecoderBase::DecodingLoop() {
             m_StartTimeStamp = GetSysCurrentTime();
         }
         if (DecodeOnePacket() != 0) {
-
-            m_DecoderState = STATE_STOP; // 解码结束，先这样写，后边再改
+            std::unique_lock<std::mutex> lock(m_Mutex);
+            m_DecoderState = STATE_PAUSE; // 解码结束，先这样写，后边再改
         }
     }
     LOGCATE("DecoderBase::DecodingLoop end");
 }
 
 int DecoderBase::DecodeOnePacket() {
+    if (m_SeekPosition > 0) {
+        //seek to frame
+        int64_t seek_target = static_cast<int64_t>(m_SeekPosition * 1000000);//微秒
+        int64_t seek_min = INT64_MIN;
+        int64_t seek_max = INT64_MAX;
+        int seek_ret = avformat_seek_file(m_AVFormatContext, -1, seek_min, seek_target, seek_max, 0);
+        if (seek_ret < 0) {
+            m_SeekSuccess = false;
+            LOGCATE("DecoderBase::DecodeOnePacket error while seeking m_MediaType=%d", m_MediaType);
+        } else {
+            if (-1 != m_StreamIndex) {
+                avcodec_flush_buffers(m_AVCodecContext);
+            }
+//            ClearCache();
+            m_SeekSuccess = true;
+            LOGCATE("DecoderBase::DecodeOnePacket seekFrame pos=%f, m_MediaType=%d", m_SeekPosition, m_MediaType);
+        }
+    }
     int result = av_read_frame(m_AVFormatContext, m_Packet);
     while (result == 0) {
         if (m_Packet->stream_index == m_StreamIndex) {
@@ -168,7 +198,10 @@ void DecoderBase::UpdateTimeStamp() {
 
     m_CurTimeStamp = (int64_t)((double )m_CurTimeStamp * av_q2d(m_AVFormatContext->streams[m_StreamIndex]->time_base) * 1000);
     LOGCATD("DecoderBase::UpdateTimeStamp m_MediaType=%d time= %ld", m_MediaType, m_CurTimeStamp);
-
+    if(m_SeekPosition > 0 && m_SeekSuccess) {
+        m_SeekPosition = 0;
+        m_SeekSuccess = false;
+    }
 }
 
 long DecoderBase::Async() {

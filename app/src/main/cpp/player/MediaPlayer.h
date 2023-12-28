@@ -28,6 +28,8 @@ public:
 
     JavaVM  *m_JavaVM = nullptr;
     jobject m_JavaObj = nullptr;
+
+    virtual void SeekToPosition(jfloat d) = 0;
 };
 
 #endif //XVIDEOPLAYER_MEDIAPLAYER_H

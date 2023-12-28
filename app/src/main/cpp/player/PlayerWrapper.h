@@ -23,6 +23,8 @@ public:
     void Pause();
     void Stop();
     long GetMediaParams(int paramType);
+
+    void SeekToPosition(jfloat d);
 private:
     MediaPlayer *m_MediaPlayer = nullptr;
 };

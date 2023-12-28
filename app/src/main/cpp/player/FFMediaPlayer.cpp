@@ -49,7 +49,12 @@ void FFMediaPlayer::Stop() {
 }
 
 void FFMediaPlayer::SeekToPosition(float position) {
-
+    if(m_VideoDecoder) {
+        m_VideoDecoder->SeekToPosition(position);
+    }
+    if(m_AudioDecoder) {
+        m_AudioDecoder->SeekToPosition(position);
+    }
 }
 
 long FFMediaPlayer::GetMediaParams(int paramType) {

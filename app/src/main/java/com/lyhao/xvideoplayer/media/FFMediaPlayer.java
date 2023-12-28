@@ -38,6 +38,9 @@ public class FFMediaPlayer {
     public long getMediaParams(int paramType) {
         return nativeGetMediaParams(mNativePlayerHandle, paramType);
     }
+    public void seekToPosition(float progress) {
+        nativeSeekToPosition(mNativePlayerHandle, progress);
+    }
     private void playerEventCallback(int msgType, float msgValue) {
         LogUtil.d(TAG,String.format(Locale.getDefault(), "onEventCallback: %d --- %f", msgType, msgValue));
         if (this.eventCallback != null) {
@@ -61,6 +64,7 @@ public class FFMediaPlayer {
 
     private native long nativeInit(String url, int playerType, int renderType, Object surface);
     private native void nativePlay(long playerHandle);
+    private native void nativeSeekToPosition(long playerHandle, float position);
 
     public interface EventCallback {
         void onPlayerEvent(int msgType, float msgValue);

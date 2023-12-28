@@ -76,6 +76,14 @@ Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeGetMediaParams(JNIEnv *env
     return 0;
 }
 
+JNIEXPORT void JNICALL
+Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeSeekToPosition(JNIEnv *env, jobject clazz, jlong playerHandler, jfloat position) {
+    if(playerHandler != 0) {
+        PlayerWrapper *playerWrapper = reinterpret_cast<PlayerWrapper *>(playerHandler);
+        playerWrapper->SeekToPosition(position);
+    }
+}
+
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LOGCATE("JNI_OnLoad");
     return JNI_VERSION_1_4;
