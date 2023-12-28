@@ -28,6 +28,9 @@ public:
     int GetVideoHeight() {
         return m_VideoHeight;
     }
+    float GetDuration() {
+        return (float) m_Duration / 1000.0f;
+    }
 
     void SetVideoRender(VideoRender *videoRender){
         m_VideoRender = videoRender;

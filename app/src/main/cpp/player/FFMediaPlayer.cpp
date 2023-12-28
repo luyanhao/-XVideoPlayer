@@ -23,6 +23,7 @@ void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType,
     m_AudioRender = new OpenSLRender();
     m_AudioDecoder->SetAudioRender(m_AudioRender);
 
+    m_AudioDecoder->SetMessageCallback(this, PostMessage);
     m_VideoDecoder->SetMessageCallback(this, PostMessage);
 }
 
@@ -58,6 +59,9 @@ long FFMediaPlayer::GetMediaParams(int paramType) {
         }
         case MEDIA_PARAM_VIDEO_HEIGHT: {
             return m_VideoDecoder != nullptr ? m_VideoDecoder->GetVideoHeight() : 0;
+        }
+        case MEDIA_PARAM_VIDEO_DURATION: {
+            return m_VideoDecoder != nullptr ? m_VideoDecoder->GetDuration() : 0;
         }
     }
     return 0;

@@ -51,7 +51,7 @@ public:
 protected:
     virtual int Init(const char* url, AVMediaType mediaType);
     virtual void UnInit();
-
+    long m_Duration = 0; //ms
     void *m_MsgContext = nullptr;
     MessageCallback m_MessageCallback = nullptr;
 
@@ -79,7 +79,6 @@ private:
     int InitFFDecoder();
     void UnInitFFDecoder();
 
-    long m_Duration = 0; //ms
     AVPacket *m_Packet = nullptr;
     AVFrame * m_Frame = nullptr;
     AVFormatContext *m_AVFormatContext = nullptr;

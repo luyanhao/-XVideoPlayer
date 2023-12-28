@@ -173,14 +173,17 @@ void DecoderBase::UpdateTimeStamp() {
 
 long DecoderBase::Async() {
     if (m_MediaType == AVMEDIA_TYPE_AUDIO) {
-        long delay = m_CurTimeStamp - m_LastedTime;
         AsyncUtil::getInstance().SetAudioPts(m_CurTimeStamp);
-        if (delay > 0) {
-            LOGCATD("DecoderBase::Async Audio delay=======%ld", delay);
-            av_usleep(delay / 2 * 1000);
+        if (m_MsgContext && m_MessageCallback) {
+            m_MessageCallback(m_MsgContext, MSG_DECODING_TIME, (float) m_CurTimeStamp / 1000.0f);
         }
-        m_LastedTime = m_CurTimeStamp;
-        return delay;
+//        long delay = m_CurTimeStamp - m_LastedTime;
+//        if (delay > 0) {
+//            LOGCATD("DecoderBase::Async Audio delay=======%ld", delay);
+//            av_usleep(delay / 2 * 1000);
+//        }
+//        m_LastedTime = m_CurTimeStamp;
+        return 0;
     } else {
         long delay = AsyncUtil::getInstance().CalculateDiff(m_CurTimeStamp);
         delay = delay > DELAY_THRESHOLD ? DELAY_THRESHOLD : delay;

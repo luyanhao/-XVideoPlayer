@@ -4,6 +4,7 @@ import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_HEIGH
 import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_WIDTH;
 import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MSG_DECODER_DONE;
 import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MSG_DECODER_READY;
+import static com.lyhao.xvideoplayer.media.FFMediaPlayer.MSG_DECODING_TIME;
 import static com.lyhao.xvideoplayer.media.FFMediaPlayer.VIDEO_RENDER_ANWINDOW;
 
 import androidx.annotation.NonNull;
@@ -73,6 +74,10 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
                     break;
                 }
                 case MSG_DECODER_DONE:{
+                    break;
+                }
+                case MSG_DECODING_TIME: {
+                    LogUtil.d(TAG, "decoding --- to --- " + msgValue);
                     break;
                 }
             }
