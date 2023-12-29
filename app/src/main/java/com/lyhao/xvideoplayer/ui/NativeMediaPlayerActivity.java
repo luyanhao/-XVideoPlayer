@@ -84,11 +84,26 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
         LogUtil.d(TAG, "========surfaceDestroyed========");
+        ffMediaPlayer.stop();
+        ffMediaPlayer.unInit(); // 会崩溃
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        LogUtil.d(TAG, "========onResume========");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogUtil.d(TAG, "========onPause========");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtil.d(TAG, "========onDestroy========");
     }
 
     @Override

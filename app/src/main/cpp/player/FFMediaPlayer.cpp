@@ -11,7 +11,7 @@ void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType,
 
     jniEnv->GetJavaVM(&m_JavaVM);
     m_JavaObj = jniEnv->NewGlobalRef(obj);
-
+    LOGCATE("FFMediaPlayer::Init------------");
     m_VideoDecoder = new VideoDecoder(url);
     m_AudioDecoder = new AudioDecoder(url);
 
@@ -28,7 +28,32 @@ void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType,
 }
 
 void FFMediaPlayer::UnInit() {
+    LOGCATE("FFMediaPlayer::UnInit");
+    if(m_VideoDecoder) {
+        delete m_VideoDecoder;
+        m_VideoDecoder = nullptr;
+    }
 
+    if(m_VideoRender) {
+        delete m_VideoRender;
+        m_VideoRender = nullptr;
+    }
+
+    if(m_AudioDecoder) {
+        delete m_AudioDecoder;
+        m_AudioDecoder = nullptr;
+    }
+
+    if(m_AudioRender) {
+        delete m_AudioRender;
+        m_AudioRender = nullptr;
+    }
+    bool isAttach = false;
+    GetJNIEnv(&isAttach)->DeleteGlobalRef(m_JavaObj);
+    if (isAttach) {
+        GetJavaVM()->DetachCurrentThread();
+    }
+    LOGCATE("FFMediaPlayer::UnInit End");
 }
 
 void FFMediaPlayer::Play() {
@@ -45,7 +70,12 @@ void FFMediaPlayer::Pause() {
 }
 
 void FFMediaPlayer::Stop() {
-
+    if(m_VideoDecoder) {
+        m_VideoDecoder->Stop();
+    }
+    if(m_AudioDecoder) {
+        m_AudioDecoder->Stop();
+    }
 }
 
 void FFMediaPlayer::SeekToPosition(float position) {

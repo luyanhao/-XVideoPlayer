@@ -6,18 +6,23 @@
 #include "LogUtil.h"
 
 int DecoderBase::Init(const char* url, AVMediaType mediaType){
+    LOGCATE("DecoderBase::Init m_MediaType=%d", mediaType);
     strcpy(m_Url, url);
     m_MediaType = mediaType;
     return 0;
 }
 
 void DecoderBase::UnInit() {
+    LOGCATE("DecoderBase::UnInit m_MediaType=%d", m_MediaType);
     if(m_Thread) {
         Stop();
         m_Thread->join(); // TODO
         delete m_Thread;
         m_Thread = nullptr;
+        m_MessageCallback = nullptr;
+        m_MsgContext = nullptr;
     }
+    LOGCATE("DecoderBase::UnInit end m_MediaType=%d", m_MediaType);
 }
 
 void DecoderBase::Start() {
@@ -25,30 +30,35 @@ void DecoderBase::Start() {
     if(m_Thread == nullptr) {
         StartDecodingThread();
     } else {
-
+        std::unique_lock<std::mutex> lock(m_Mutex);
+        m_DecoderState = STATE_DECODING;
+        m_Cond.notify_all();
     }
 }
 
 int DecoderBase::InitFFDecoder() {
     int result = -1;
+    LOGCATE("DecoderBase::InitFFDecoder start------------%d", m_MediaType);
     do {
         // 1.创建封装格式上下文
         m_AVFormatContext = avformat_alloc_context();
 
         // 2.打开文件
-        if (avformat_open_input(&m_AVFormatContext, m_Url, NULL, NULL) != 0) {
-            LOGCATE("DecoderBase::InitFFDecoder avformat_open_input fail.");
+        result = avformat_open_input(&m_AVFormatContext, m_Url, NULL, NULL);
+        if (result != 0) {
+            LOGCATE("DecoderBase::InitFFDecoder avformat_open_input fail. %d", result);
             break;
         }
         // 3.获取音视频流信息
-        if (avformat_find_stream_info(m_AVFormatContext, NULL) < 0) {
-            LOGCATE("DecoderBase::InitFFDecoder avformat_find_stream_info fail.");
+        result = avformat_find_stream_info(m_AVFormatContext, NULL);
+        if (result < 0) {
+            LOGCATE("DecoderBase::InitFFDecoder avformat_find_stream_info fail. %d", result);
             break;
         }
         // 4.获取音视频流索引
         for (int i = 0; i < m_AVFormatContext->nb_streams; i ++) {
             int codecType = m_AVFormatContext->streams[i]->codecpar->codec_type;
-            LOGCATI("DecoderBase::InitFFDecoder stream codec_type=%d", codecType);
+            LOGCATI("DecoderBase::InitFFDecoder stream codec_type=%d m_MediaType=%d", codecType, m_MediaType);
             if (codecType == m_MediaType) {
                 m_StreamIndex = i;
                 break;
@@ -147,7 +157,7 @@ int DecoderBase::DecodeOnePacket() {
             if (-1 != m_StreamIndex) {
                 avcodec_flush_buffers(m_AVCodecContext);
             }
-//            ClearCache();
+            ClearCache();
             m_SeekSuccess = true;
             LOGCATE("DecoderBase::DecodeOnePacket seekFrame pos=%f, m_MediaType=%d", m_SeekPosition, m_MediaType);
         }
@@ -181,6 +191,7 @@ int DecoderBase::DecodeOnePacket() {
         av_packet_unref(m_Packet);
         result = av_read_frame(m_AVFormatContext, m_Packet);
     }
+    av_packet_unref(m_Packet);
 //    LOGCATI("DecoderBase::DecodeOnePacket return -=-=-=-=-= %d", result);
     return result;
 }
@@ -253,7 +264,10 @@ void DecoderBase::DoAVDecoding(DecoderBase * decoder) {
 }
 
 void DecoderBase::Stop() {
-
+    LOGCATE("DecoderBase::Stop");
+    std::unique_lock<std::mutex> lock(m_Mutex);
+    m_DecoderState = STATE_STOP;
+    m_Cond.notify_all();
 }
 
 void DecoderBase::UnInitFFDecoder() {

@@ -28,10 +28,10 @@ static const int ACC_NB_SAMPLES = 1024;
 class AudioDecoder : public DecoderBase{
 public:
     AudioDecoder(char *url) {
-        DecoderBase::Init(url, AVMEDIA_TYPE_AUDIO);
+        Init(url, AVMEDIA_TYPE_AUDIO);
     }
     ~AudioDecoder(){
-        DecoderBase::UnInit();
+        UnInit();
     }
 
     void SetAudioRender(AudioRender *mAudioRender);

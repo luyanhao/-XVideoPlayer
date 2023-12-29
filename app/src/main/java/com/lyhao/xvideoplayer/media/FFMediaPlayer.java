@@ -61,9 +61,17 @@ public class FFMediaPlayer {
     public void play() {
         nativePlay(mNativePlayerHandle);
     }
+    public void stop() {
+        nativeStop(mNativePlayerHandle);
+    }
+    public void unInit() {
+        nativeUnInit(mNativePlayerHandle);
+    }
 
     private native long nativeInit(String url, int playerType, int renderType, Object surface);
     private native void nativePlay(long playerHandle);
+    private native void nativeStop(long playerHandle);
+    private native void nativeUnInit(long playerHandle);
     private native void nativeSeekToPosition(long playerHandle, float position);
 
     public interface EventCallback {

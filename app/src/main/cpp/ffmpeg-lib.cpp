@@ -84,6 +84,22 @@ Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeSeekToPosition(JNIEnv *env
     }
 }
 
+JNIEXPORT void JNICALL
+Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeStop(JNIEnv *env, jobject clazz, jlong playerHandler) {
+    if(playerHandler != 0) {
+        PlayerWrapper *playerWrapper = reinterpret_cast<PlayerWrapper *>(playerHandler);
+        playerWrapper->Stop();
+    }
+}
+JNIEXPORT void JNICALL
+Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeUnInit(JNIEnv *env, jobject clazz,
+                                                             jlong playerHandler) {
+    if(playerHandler != 0) {
+        PlayerWrapper *playerWrapper = reinterpret_cast<PlayerWrapper *>(playerHandler);
+        playerWrapper->UnInit();
+    }
+}
+
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LOGCATE("JNI_OnLoad");
     return JNI_VERSION_1_4;
