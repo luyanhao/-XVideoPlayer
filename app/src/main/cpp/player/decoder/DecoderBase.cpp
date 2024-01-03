@@ -19,8 +19,6 @@ void DecoderBase::UnInit() {
         m_Thread->join(); // TODO
         delete m_Thread;
         m_Thread = nullptr;
-        m_MessageCallback = nullptr;
-        m_MsgContext = nullptr;
     }
     LOGCATE("DecoderBase::UnInit end m_MediaType=%d", m_MediaType);
 }
