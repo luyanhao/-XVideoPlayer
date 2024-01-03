@@ -72,7 +72,7 @@ void VideoDecoder::OnDecoderDone() {
         m_RGBAFrame = nullptr;
     }
     if(m_FrameBuffer != nullptr) {
-        free(&m_FrameBuffer);
+        free(m_FrameBuffer);
         m_FrameBuffer = nullptr;
     }
     if(m_SwsContext != nullptr) {
