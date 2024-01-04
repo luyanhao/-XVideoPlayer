@@ -18,6 +18,9 @@
         android:theme="@style/Theme.XVideoPlayer"
         tools:targetApi="31">
         <activity
+            android:name=".ui.GLMediaPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.NativeMediaPlayerActivity"
             android:exported="false" />
         <activity

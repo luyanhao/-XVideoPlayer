@@ -13,8 +13,8 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"/>
         <Button
-            android:id="@+id/action_2"
-            android:text="2"
+            android:id="@+id/action_GLMediaPlayerActivity"
+            android:text="GLMediaPlayerActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClick"/>

@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.lyhao.xvideoplayer.media.FFMediaPlayer;
+import com.lyhao.xvideoplayer.ui.GLMediaPlayerActivity;
 import com.lyhao.xvideoplayer.ui.NativeMediaPlayerActivity;
 import com.lyhao.xvideoplayer.util.CommonUtils;
 
@@ -127,6 +128,8 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if (view.getId() == R.id.action_NativeMediaPlayerActivity) {
             startActivity(new Intent(this, NativeMediaPlayerActivity.class));
+        } else if (view.getId() == R.id.action_GLMediaPlayerActivity) {
+            startActivity(new Intent(this, GLMediaPlayerActivity.class));
         }
     }
 
