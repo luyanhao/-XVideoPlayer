@@ -6,6 +6,7 @@
 #include "FFMediaPlayer.h"
 #include "LogUtil.h"
 #include "OpenSLRender.h"
+#include "VideoGLRender.h"
 
 void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType, jobject surface) {
 
@@ -18,6 +19,8 @@ void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int renderType,
     if (renderType == VIDEO_RENDER_ANWINDOW) {
         m_VideoRender = new NativeRender(renderType, jniEnv, surface);
         m_VideoDecoder->SetVideoRender(m_VideoRender);
+    } else if (renderType == VIDEO_RENDER_OPENGL) {
+        m_VideoDecoder->SetVideoRender(VideoGLRender::GetInstance());
     }
 
     m_AudioRender = new OpenSLRender();

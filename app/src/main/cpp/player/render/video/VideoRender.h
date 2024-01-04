@@ -7,6 +7,7 @@
 
 #include "ImageDef.h"
 
+#define VIDEO_RENDER_OPENGL             0
 #define VIDEO_RENDER_ANWINDOW  1
 
 class VideoRender {
