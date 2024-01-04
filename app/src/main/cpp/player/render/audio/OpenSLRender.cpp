@@ -165,7 +165,7 @@ int OpenSLRender::CreateAudioPlayer() {
     SLDataFormat_PCM pcm = {
             SL_DATAFORMAT_PCM,//format type
             (SLuint32)2,//channel count
-            SL_SAMPLINGRATE_44_1,//44100hz
+            SL_SAMPLINGRATE_48,//48000hz
             SL_PCMSAMPLEFORMAT_FIXED_16,// bits per sample
             SL_PCMSAMPLEFORMAT_FIXED_16,// container size
             SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT,// channel mask

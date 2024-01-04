@@ -15,7 +15,7 @@ extern "C" {
 #include "Decoder.h"
 #include "AudioRender.h"
 // 音频编码采样率
-static const int AUDIO_DST_SAMPLE_RATE = 44100;
+static const int AUDIO_DST_SAMPLE_RATE = 48000;
 // 音频编码通道数
 static const int AUDIO_DST_CHANNEL_COUNTS = 2;
 // 音频编码声道格式
