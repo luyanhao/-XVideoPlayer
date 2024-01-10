@@ -11,6 +11,11 @@ public class FFMediaPlayer {
     static {
         System.loadLibrary("ffmpeg-lib");
     }
+    //gl render type
+    public static final int VIDEO_GL_RENDER = 0;
+    public static final int AUDIO_GL_RENDER = 1;
+    public static final int VR_3D_GL_RENDER = 2;
+    
     //player type
     public static final int FFMEDIA_PLAYER = 0;
     public static final int HWCODEC_PLAYER = 1;
@@ -73,6 +78,8 @@ public class FFMediaPlayer {
     private native void nativeStop(long playerHandle);
     private native void nativeUnInit(long playerHandle);
     private native void nativeSeekToPosition(long playerHandle, float position);
+
+    public native void nativeOnSurfaceCreated(int videoGlRender);
 
     public interface EventCallback {
         void onPlayerEvent(int msgType, float msgValue);

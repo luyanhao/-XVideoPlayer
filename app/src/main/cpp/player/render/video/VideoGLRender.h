@@ -6,8 +6,14 @@
 #define XVIDEOPLAYER_VIDEOGLRENDER_H
 
 
+#include <__mutex_base>
+#include <GLES3/gl3.h>
 #include "BaseGLRender.h"
 #include "VideoRender.h"
+#include "vec2.hpp"
+
+using namespace glm;
+#define TEXTURE_NUM 3
 
 class VideoGLRender : public VideoRender, public BaseGLRender{
 public:
@@ -32,7 +38,15 @@ public:
 private:
     VideoGLRender();
     virtual ~VideoGLRender();
+    static std::mutex m_Mutex;
+    static VideoGLRender *s_Instance;
 
+    GLuint m_ProgramObj = GL_NONE;
+    GLuint m_TextureIds[TEXTURE_NUM];
+    GLuint m_VaoId;
+    GLuint m_VboIds[3];
+
+    vec2 m_TouchXY;
 };
 
 

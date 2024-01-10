@@ -1,5 +1,7 @@
 package com.lyhao.xvideoplayer.ui;
 
+import static com.lyhao.xvideoplayer.media.FFMediaPlayer.VIDEO_GL_RENDER;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.opengl.GLSurfaceView;
@@ -32,7 +34,7 @@ public class GLMediaPlayerActivity extends AppCompatActivity implements GLSurfac
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-
+        ffMediaPlayer.nativeOnSurfaceCreated(VIDEO_GL_RENDER);
     }
 
     @Override

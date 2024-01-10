@@ -7,6 +7,8 @@
 #include "util/LogUtil.h"
 
 #include "PlayerWrapper.h"
+#include "BaseGLRender.h"
+#include "VideoGLRender.h"
 
 extern "C" {
 #include <libavcodec/version.h>
@@ -97,6 +99,16 @@ Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeUnInit(JNIEnv *env, jobjec
     if(playerHandler != 0) {
         PlayerWrapper *playerWrapper = reinterpret_cast<PlayerWrapper *>(playerHandler);
         playerWrapper->UnInit();
+    }
+}
+
+JNIEXPORT void JNICALL
+Java_com_lyhao_xvideoplayer_media_FFMediaPlayer_nativeOnSurfaceCreated(JNIEnv *env, jobject clazz, jint video_gl_render) {
+    switch (video_gl_render) {
+        case VIDEO_GL_RENDER: {
+            VideoGLRender::GetInstance()->OnSurfaceCreated();
+            break;
+        }
     }
 }
 
